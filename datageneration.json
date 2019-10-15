@@ -1,0 +1,12 @@
+{
+    "users":
+    [
+      {
+        'repeat(5, 50)': {
+          balance: '{{floating(1000, 4000, 2, "€0,0.00")}}',
+          age: '{{integer(20,40)}}',
+          name: '{{firstName()}}'
+        }
+      }
+    ]
+}
