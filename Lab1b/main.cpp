@@ -4,11 +4,12 @@
 #include <omp.h>
 #include "json.hpp"
 #include <unistd.h>
-#include <windows.h>
+#include <time.h>
 
 using namespace std;
 using json = nlohmann::json;
 static const int MAX_USERS = 200;
+static const struct timespec one_millisecond = {0, 1000000};
 
 
 namespace ns{
@@ -56,24 +57,19 @@ namespace ns{
 
 class Users{
     private:
-        std::array<ns::User*, MAX_USERS> users;
-        int crr_size;
+        vector<ns::User> users;
     public:
-        Users(){
-            crr_size = 0;
-        }
+        Users(){}
         void addUser(ns::User user){
-            users[crr_size] = &user;
-            crr_size++;
-            std::sort(users.begin(), users.end(), [](ns::User* a, ns::User* b) { return a->Balance < b->Balance; });
+            users.push_back(user);
+            std::sort(users.begin(), users.end(), [](ns::User a, ns::User b) { return a.Balance < b.Balance; });
         }
-        ns::User*    getUser(int id) { return users[id]; }
-        int     getLength() { return crr_size; }
+        ns::User    getUser(int id) { return users.at(id); }
+        int     getLength() { return users.size(); }
         ns::User    getLastRemove() {
-            if(crr_size > 1){
-                crr_size--;
-                ns::User back = *users[crr_size];
-                delete users[crr_size];
+            if(getLength() > 0){
+                ns::User back = users.back();
+                users.pop_back();
                 return back;
             }
         }
@@ -103,8 +99,7 @@ class Monitor{
                     return empty;
                 }
                 omp_unset_lock(&mux);
-                Sleep(2); //Winblows
-                //usleep(2); //loonix
+                nanosleep(&one_millisecond, NULL);
                 omp_set_lock(&mux);
             }
             ns::User ret = users.getLastRemove();
@@ -116,8 +111,7 @@ class Monitor{
             omp_set_lock(&mux);
             while (users.getLength() >= MAX_USERS){
                 omp_unset_lock(&mux);
-                Sleep(2); //Winblows
-                //usleep(2); //loonix
+                nanosleep(&one_millisecond, NULL);
                 omp_set_lock(&mux);
             }
             users.addUser(user);
