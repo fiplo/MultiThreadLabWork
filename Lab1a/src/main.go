@@ -64,7 +64,8 @@ func main() {
 	}
 
 	for i := 0; i < len(users.Users); i++ {
-		inputM.addEntry(users.removeLast())
+		var tempuser = users.removeLast()
+		inputM.addEntry(tempuser)
 	}
 
 	wg.Wait()
@@ -137,13 +138,12 @@ func (a Users) Swap(i, j int) {
 	a.Users[i], a.Users[j] = a.Users[j], a.Users[i]
 }
 
-func (a Users) addUser(user User) Users {
+func (a *Users) addUser(user User) {
 	a.Users = append(a.Users, user)
-	sort.Sort(Users(a))
-	return a
+	sort.Sort(Users(*a))
 }
 
-func (a Users) removeLast() User {
+func (a *Users) removeLast() User {
 	var returnValue User
 	if a.Len() > 0 {
 		returnValue = a.Users[a.Len()-1]
@@ -173,7 +173,8 @@ func (a *Monitor) addEntry(user User) {
 		time.Sleep(2 * time.Millisecond)
 		a.mutex.Lock()
 	}
-	a.users.addUser(user)
+	a.users.Users = append(a.users.Users, user)
+	sort.Sort(Users(a.users))
 	a.index++
 	a.mutex.Unlock()
 }
@@ -188,10 +189,13 @@ func (a *Monitor) takeEntry() User {
 			return user
 		}
 		a.mutex.Unlock()
-		time.Sleep(2 * time.Millisecond)
+		time.Sleep(10 * time.Millisecond)
 		a.mutex.Lock()
 	}
-	user = a.users.removeLast()
+	if a.users.Len() > 0 {
+		user = a.users.Users[a.users.Len()-1]
+		a.users.Users = a.users.Users[:a.users.Len()-1]
+	}
 	a.index--
 	a.mutex.Unlock()
 	return user
