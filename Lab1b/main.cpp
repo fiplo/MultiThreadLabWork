@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <regex>
+#include <cmath>
 
 using namespace std;
 using json = nlohmann::json;
@@ -78,6 +79,7 @@ class Monitor{
                 if (done) {
                     omp_unset_lock(&mux);
                     ns::User empty;
+                    empty.Balance = nan("");
                     return empty;
                 }
                 omp_unset_lock(&mux);
@@ -158,9 +160,11 @@ Users ParseJson(string fileName){
 
 void Work(Monitor& in, Monitor& out){
     ns::User user;
-    while(true){
+    bool work = true;
+    while(work){
         user = in.take();
-        if(user.Age > USER_AGE){
+        if(isnan(user.Balance)) work = false;
+        if(user.Age > USER_AGE && !isnan(user.Balance)){
             user.Balance = user.Balance * 1.1;
             out.place(user);
         }
