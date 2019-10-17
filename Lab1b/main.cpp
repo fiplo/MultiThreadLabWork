@@ -72,6 +72,8 @@ class Users{
                 users.pop_back();
                 return back;
             }
+            ns::User oof;
+            return oof;
         }
 };
 

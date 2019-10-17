@@ -7,6 +7,7 @@
             "args": [
                 "-g",
                 "${file}",
+                "-fopenmp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
