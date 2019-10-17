@@ -5,11 +5,13 @@
 #include "json.hpp"
 #include <unistd.h>
 #include <time.h>
+#include <regex>
 
 using namespace std;
 using json = nlohmann::json;
-static const int MAX_USERS = 200;
-static const struct timespec one_millisecond = {0, 1000000};
+static const int MAX_USERS = 10;
+static const int USER_AGE = 30;
+static const struct timespec waittime = {0, 1000000};
 
 
 namespace ns{
@@ -18,6 +20,7 @@ namespace ns{
         int Age;
         double Balance;
     };
+
 
     void to_json(json& j, const User& p){
         j = json{{"name", p.Name}, {"age", p.Age}, {"balance", p.Balance}};
@@ -31,30 +34,6 @@ namespace ns{
 
 }
 
-/*class User {
-    private:
-        ns::User user;
-		string Name;
-		int Age;
-		double Balance;
-    public:
-        User(string name, int age, double balance)
-        {
-            Name = name;
-            Age = age;
-            Balance = balance;
-        }
-        User(){}
-        void BlankOut() {
-            Name = "";
-            Age = NULL;
-            Balance = double(NULL);
-        }
-        string getName() { return Name; }
-        int getAge() { return Age; }
-        double getBalance() { return Balance; }
-};*/
-
 class Users{
     private:
         vector<ns::User> users;
@@ -67,13 +46,9 @@ class Users{
         ns::User    getUser(int id) { return users.at(id); }
         int     getLength() { return users.size(); }
         ns::User    getLastRemove() {
-            if(getLength() > 0){
-                ns::User back = users.back();
-                users.pop_back();
-                return back;
-            }
-            ns::User oof;
-            return oof;
+            ns::User back = users.back();
+            users.pop_back();
+            return back;
         }
 };
 
@@ -82,6 +57,7 @@ class Monitor{
         Users users;
         int index = 0;
         omp_lock_t mux;
+        int maxMonitor;
     public:
         bool done = false;
         Monitor() {
@@ -92,35 +68,41 @@ class Monitor{
             omp_destroy_lock(&mux);
         }
 
+        void setSize(int size){
+            maxMonitor = size;
+        }
+
         ns::User take(){
             omp_set_lock(&mux);
             while (index == 0) {
-                if (done == true) {
+                if (done) {
                     omp_unset_lock(&mux);
                     ns::User empty;
                     return empty;
                 }
                 omp_unset_lock(&mux);
-                nanosleep(&one_millisecond, NULL);
+                nanosleep(&waittime, NULL);
                 omp_set_lock(&mux);
             }
             ns::User ret = users.getLastRemove();
+            index--;
             omp_unset_lock(&mux);
             return ret;
         }
 
         void place(ns::User user){
             omp_set_lock(&mux);
-            while (users.getLength() >= MAX_USERS){
+            while (users.getLength() >= maxMonitor){
                 omp_unset_lock(&mux);
-                nanosleep(&one_millisecond, NULL);
+                nanosleep(&waittime, NULL);
                 omp_set_lock(&mux);
             }
             users.addUser(user);
+            index++;
             omp_unset_lock(&mux);
         }
 
-        Users TakeEntireList(){
+        Users &TakeEntireList(){
             return users;
         }
 };
@@ -131,10 +113,15 @@ void Work(Monitor& in, Monitor& out);
 void OutputJson(string filename, Users users);
 
 int main(int, char**) {
-    string fileName = "Paulius_Ratkevicius_L1_dat_1.json";
+    string fileName = "../data/Paulius_Ratkevicius_L1_dat_1.json";
+    regex outputdir(".json");
+    string outputFile = regex_replace(fileName, outputdir, "_Res.json");
     Users users = ParseJson(fileName);
     Monitor in;
     Monitor out;
+    in.setSize(10);
+    out.setSize(users.getLength());
+
 
 #pragma omp parallel num_threads(4)
     {
@@ -149,6 +136,7 @@ int main(int, char**) {
 #pragma omp barrier
     }
     users = out.TakeEntireList();
+    OutputJson(outputFile, users);
     return 0;
 }
 
@@ -170,13 +158,12 @@ Users ParseJson(string fileName){
 
 void Work(Monitor& in, Monitor& out){
     ns::User user;
-    double balance;
     while(true){
         user = in.take();
-        if(user.Balance < 1000)
-            return;
-        user.Balance = user.Balance * 1.1;
-        out.place(user);
+        if(user.Age > USER_AGE){
+            user.Balance = user.Balance * 1.1;
+            out.place(user);
+        }
     }
 }
 
