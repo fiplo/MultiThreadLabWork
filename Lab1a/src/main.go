@@ -13,6 +13,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"regexp"
 	"sort"
@@ -34,10 +35,10 @@ func work(input *Monitor, output *Monitor, wg *sync.WaitGroup) {
 	var user User
 	for work {
 		user = input.takeEntry()
-		if Math.IsNaN(user.Balance) {
+		if math.IsNaN(user.Balance) {
 			work = false
 		}
-		if user.Age > ageReq && !IsNaN(user.Balance) {
+		if user.Age > ageReq && !math.IsNaN(user.Balance) {
 			user.Balance = user.Balance * 1.1
 			output.addEntry(user)
 		}
@@ -159,15 +160,15 @@ type Monitor struct {
 	done    bool
 }
 
-func (a Monitor) setSize(size int) {
+func (a *Monitor) setSize(size int) {
 	a.maxSize = size
 	a.done = false
 	a.index = 0
 }
 
-func (a Monitor) addEntry(user User) {
+func (a *Monitor) addEntry(user User) {
 	a.mutex.Lock()
-	for a.users.Len() >= a.maxSize {
+	for a.index >= a.maxSize {
 		a.mutex.Unlock()
 		time.Sleep(2 * time.Millisecond)
 		a.mutex.Lock()
@@ -177,13 +178,13 @@ func (a Monitor) addEntry(user User) {
 	a.mutex.Unlock()
 }
 
-func (a Monitor) takeEntry() User {
+func (a *Monitor) takeEntry() User {
 	var user User
 	a.mutex.Lock()
 	for a.index == 0 {
 		if a.done {
 			a.mutex.Unlock()
-			user.Balance = NaN()
+			user.Balance = math.NaN()
 			return user
 		}
 		a.mutex.Unlock()
@@ -196,6 +197,6 @@ func (a Monitor) takeEntry() User {
 	return user
 }
 
-func (a Monitor) returnUsers() Users {
+func (a *Monitor) returnUsers() Users {
 	return a.users
 }
