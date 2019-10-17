@@ -115,7 +115,7 @@ void Work(Monitor& in, Monitor& out);
 void OutputJson(string filename, Users users);
 
 int main(int, char**) {
-    string fileName = "../data/Paulius_Ratkevicius_L1_dat_1.json";
+    string fileName = "../data/Paulius_Ratkevicius_L1_dat_3.json";
     regex outputdir(".json");
     string outputFile = regex_replace(fileName, outputdir, "_Res.json");
     Users users = ParseJson(fileName);
