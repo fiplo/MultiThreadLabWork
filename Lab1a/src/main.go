@@ -67,6 +67,8 @@ func main() {
 		var tempuser = users.removeLast()
 		inputM.addEntry(tempuser)
 	}
+	println("write done")
+	inputM.done = true
 
 	wg.Wait()
 	var outputFile string
@@ -183,6 +185,8 @@ func (a *Monitor) takeEntry() User {
 	var user User
 	a.mutex.Lock()
 	for a.index == 0 {
+		println(a.index)
+		println(a.done)
 		if a.done {
 			a.mutex.Unlock()
 			user.Balance = math.NaN()
@@ -195,8 +199,8 @@ func (a *Monitor) takeEntry() User {
 	if a.users.Len() > 0 {
 		user = a.users.Users[a.users.Len()-1]
 		a.users.Users = a.users.Users[:a.users.Len()-1]
+		a.index--
 	}
-	a.index--
 	a.mutex.Unlock()
 	return user
 }
