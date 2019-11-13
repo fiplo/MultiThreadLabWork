@@ -112,7 +112,7 @@ type Users struct {
 
 type User struct {
 	Name    string  `json:"name"`
-	Balance float64 `json:"balance"` //Why do you struggle to read numbers????? (Apparently float numbers can't be in parenthesis, eventhough that's default for json???)
+	Balance float64 `json:"balance"`
 	Age     int     `json:"age"`
 }
 
