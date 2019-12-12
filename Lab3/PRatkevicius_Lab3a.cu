@@ -45,7 +45,7 @@ void read(User users[], string fileName, int* count) {
     if( ifs.eof() ) break;
     i++;
 	}
-  count = i;
+  *count = i;
 
 }
 __global__ void addition(User* input, User* output, size_t n, int step)
@@ -72,7 +72,7 @@ int main() {
 
 	int threads = 4;
 	User input[ARRAY_SIZE];
-	read(input, fileName, *counter);
+	read(input, fileName, &counter);
 	User* hostData = input;
 	User* deviceData;
 	User* hostA = new User[counter];
