@@ -10,7 +10,7 @@
 using namespace std;
 
 const int ARRAY_SIZE = 50;
-const int CHAR_ARRAY_SIZE = 25;
+const int CHAR_ARRAY_SIZE = 150;
 
 
 struct User {
