@@ -10,59 +10,62 @@ const int ARRAY_SIZE = 25;
 const int CHAR_ARRAY_SIZE = 10;
 const int STRING_SIZE = 254;
 
-struct Item {
-        int intas;
-        double doublas;
-        char stringas[STRING_SIZE];
+struct User {
+    char Name[CHAR_ARRAY_SIZE];
+    int Age;
+    double Balance;
 };
+
+
 struct Addition_func{
-__device__ Item operator()(Item accum, Item src){
+__device__ User operator()(User accum, User src){
 	int accLen, srcLen;
-	for (accLen  = 0; accum.stringas[accLen] != '\0'; accLen++);
-	for (srcLen = 0; src.stringas[srcLen] != '\0'; srcLen++)
+	for (accLen  = 0; accum.Name[accLen] != '\0'; accLen++);
+	for (srcLen = 0; src.Name[srcLen] != '\0'; srcLen++)
 	{
-		accum.stringas[accLen] = src.stringas[srcLen];
+		accum.Name[accLen] = src.Name[srcLen];
 		accLen++;
 	}
-	accum.stringas[accLen] = '\0';
-	accum.intas += src.intas;
-	accum.doublas += src.doublas;
+	accum.Name[accLen] = '\0';
+	accum.Age += src.Age;
+	accum.Balance += src.Balance;
 	return accum;
 	}
 };
-void read(host_vector<Item> &hostData) {
-	ifstream  ifs("IFK-7_NojusD_L3_dat.txt");
-	//ifstream  ifs("IFK_NojusD_L3_dat.txt");
-	string stringas;
-        int intas;
-        double doublas;
-	Item item;
+void read(host_vector<User> &hostData, string fileName) {
+	ifstream  ifs(fileName);
+	string Name;
+        int Age;
+        double Balance;
+	User item;
 
         if (ifs.fail()) {
-                cout << "Error opening file (IFK-7_NojusD_L3_dat.txt)" << endl;
+                cout << "Error opening file " + fileName << endl;
                 exit(1);
         }
         for(size_t i = 0; i <ARRAY_SIZE; i++){
-           	ifs >> stringas >> intas >> doublas;
+           	ifs >> Name >> Age >> Balance;
                 for (int j = 0; j < CHAR_ARRAY_SIZE;j++) {
-                        if (stringas[j] == 0) {
-        			item.stringas[j] = 0;
+                        if (Name[j] == 0) {
+                                item.Name[j] = 0;
                                 break;
                         }
-                  	item.stringas[j] = (char)stringas[j];
+                  	item.Name[j] = (char)Name[j];
                 }
-                item.intas = intas;
-                item.doublas = doublas;
-		hostData.push_back(item);
+                item.Age = Age;
+                item.Balance = Balance;
+                hostData.push_back(item);
         }
 }
 int main() {
-	host_vector<Item> hostData;
-        read(hostData);
-	device_vector<Item> deviceData = hostData;
-	Item dest = {0, 0., ""};
-	Item answer = reduce(deviceData.begin(), deviceData.end(), dest, Addition_func());
-        cout << answer.intas << " "  << answer.doublas << "\n" << answer.stringas << "\n";
+  string fileName = "../data/Paulius_Ratkevicius_L1_dat_1_ResPlain.txt";
+
+	host_vector<User> hostData;
+  read(hostData);
+	device_vector<User> deviceData = hostData;
+	User dest = {0, 0., ""};
+	User answer = reduce(deviceData.begin(), deviceData.end(), dest, Addition_func());
+        cout << answer.Name << " "  << answer.Age << "\n" << answer.Balance << "\n";
 	return 0;
 }
 
