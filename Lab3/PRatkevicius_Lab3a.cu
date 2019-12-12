@@ -20,7 +20,7 @@ struct User {
 };
 
 
-void read(User users[], string fileName, int &count) {
+void read(User users[], string fileName, int* count) {
 	ifstream  ifs(fileName);
 	string Name;
 	int Age;
@@ -66,13 +66,13 @@ __global__ void addition(User* input, User* output, size_t n, int step)
 }
 int main() {
 
-  string fileName = "../data/Paulius_Ratkevicius_L1_dat_1_ResPlain.txt";
+  string fileName = "../data/Paulius_Ratkevicius_L2_dat_1_ResPlain.txt";
 
   int counter;
 
 	int threads = 4;
 	User input[ARRAY_SIZE];
-	read(input, fileName, counter);
+	read(input, fileName, *counter);
 	User* hostData = input;
 	User* deviceData;
 	User* hostA = new User[counter];
@@ -81,7 +81,6 @@ int main() {
 	cudaMalloc(&deviceA, counter * sizeof(User));
 	cudaMemcpy(deviceData, input, counter * sizeof(User), cudaMemcpyHostToDevice);
 	addition << <1, threads >> > (deviceData, deviceA, counter, threads);
-	//cudaMemcpy(hostData, deviceData, ARRAY_SIZE * sizeof(User), cudaMemcpyDeviceToHost);
 	cudaMemcpy(hostA, deviceA, counter * sizeof(User), cudaMemcpyDeviceToHost);
 	for (int i = 0; i < threads; i++) {
 		cout << hostA[i].Name << " " << hostA[i].Age << " " << hostA[i].Balance << "\n";
