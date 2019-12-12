@@ -63,7 +63,7 @@ int main() {
 	host_vector<User> hostData;
   read(hostData, fileName);
 	device_vector<User> deviceData = hostData;
-	User dest = {0, 0., ""};
+	User dest = {"", 0, 0.};
 	User answer = reduce(deviceData.begin(), deviceData.end(), dest, Addition_func());
   cout << answer.Name << " "  << answer.Age << "\n" << answer.Balance << "\n";
 	return 0;
