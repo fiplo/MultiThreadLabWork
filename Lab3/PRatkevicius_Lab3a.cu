@@ -77,7 +77,7 @@ int main() {
   cout << counter << endl;
 	User* hostData = input;
 	User* deviceData;
-	User* hostA = new User[counter];
+	User* hostA = new User[ARRAY_SIZE];
 	User* deviceA;// = new User[ARRAY_SIZE];
 	cudaMalloc(&deviceData, counter * sizeof(User));
 	cudaMalloc(&deviceA, counter * sizeof(User));
