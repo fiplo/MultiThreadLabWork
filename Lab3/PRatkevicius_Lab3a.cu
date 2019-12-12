@@ -37,7 +37,7 @@ void read(User users[], string fileName, int &count) {
 		users[i].Balance = Balance;
     for (int j = 0; j < CHAR_ARRAY_SIZE;j++) {
 			if (Name[j] == 0) {
-				items[i].stringas[j] = 0;
+				users[i].Name[j] = 0;
 				break;
 			}
 			users[i].Name[j] = (char)Name[j];
