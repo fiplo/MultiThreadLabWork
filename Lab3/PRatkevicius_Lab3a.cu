@@ -10,11 +10,11 @@
 using namespace std;
 
 const int ARRAY_SIZE = 50;
-const int CHAR_ARRAY_SIZE = 11;
+const int CHAR_ARRAY_SIZE = 25;
 
 
 struct User {
-    char Name;
+    char Name[CHAR_ARRAY_SIZZEZ];
     int Age;
     double Balance;
 };
@@ -35,7 +35,7 @@ void read(User users[], string fileName, int &count) {
 		ifs >> Name >> Age >> Balance;
 		users[i].Age = Age;
 		users[i].Balance = Balance;
-    for (int j = 0; j < CHAR_ARRAY_SIZE;j++) {
+    for (int j = 1; j < CHAR_ARRAY_SIZE;j++) {
 			if (Name[j] == 0) {
 				users[i].Name[j] = 0;
 				break;
