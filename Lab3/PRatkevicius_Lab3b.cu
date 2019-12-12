@@ -61,11 +61,11 @@ int main() {
   string fileName = "../data/Paulius_Ratkevicius_L1_dat_1_ResPlain.txt";
 
 	host_vector<User> hostData;
-  read(hostData);
+  read(hostData, fileName);
 	device_vector<User> deviceData = hostData;
 	User dest = {0, 0., ""};
 	User answer = reduce(deviceData.begin(), deviceData.end(), dest, Addition_func());
-        cout << answer.Name << " "  << answer.Age << "\n" << answer.Balance << "\n";
+  cout << answer.Name << " "  << to_string(answer.Age) << "\n" << to_string(answer.Balance) << "\n";
 	return 0;
 }
 
