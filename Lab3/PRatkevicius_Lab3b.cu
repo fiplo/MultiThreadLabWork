@@ -7,11 +7,11 @@ using namespace std;
 using namespace thrust;
 
 const int ARRAY_SIZE = 25;
-const int CHAR_ARRAY_SIZE = 35;
+const int CHAR_ARRAY_SIZE = 10;
 const int STRING_SIZE = 254;
 
 struct User {
-    char Name[CHAR_ARRAY_SIZE];
+    char Name[STRING_SIZE];
     int Age;
     double Balance;
 };
@@ -37,7 +37,7 @@ void read(host_vector<User> &hostData, string fileName) {
 	string Name;
         int Age;
         double Balance;
-	User item;
+        User item;
 
         if (ifs.fail()) {
                 cout << "Error opening file " + fileName << endl;
@@ -55,6 +55,8 @@ void read(host_vector<User> &hostData, string fileName) {
                 item.Age = Age;
                 item.Balance = Balance;
                 hostData.push_back(item);
+                cout << item.Name << " "  << item.Age << "\n" << item.Balance << "\n";
+
         }
 }
 int main() {
