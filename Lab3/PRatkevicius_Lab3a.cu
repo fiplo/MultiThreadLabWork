@@ -74,6 +74,7 @@ int main() {
 	int threads = 4;
 	User input[ARRAY_SIZE];
 	read(input, fileName, &counter);
+  cout << counter << endl;
 	User* hostData = input;
 	User* deviceData;
 	User* hostA = new User[counter];
