@@ -14,7 +14,7 @@ const int CHAR_ARRAY_SIZE = 25;
 
 
 struct User {
-    char Name[CHAR_ARRAY_SIZZEZ];
+    char Name[CHAR_ARRAY_SIZE];
     int Age;
     double Balance;
 };
