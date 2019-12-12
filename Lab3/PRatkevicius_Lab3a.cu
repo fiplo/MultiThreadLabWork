@@ -11,7 +11,7 @@ using namespace std;
 
 const int ARRAY_SIZE = 50;
 const int CHAR_ARRAY_SIZE = 10;
-const int STRING_SIZZE = 256;
+const int STRING_SIZE = 256;
 
 
 struct User {
