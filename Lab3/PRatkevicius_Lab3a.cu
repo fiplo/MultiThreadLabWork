@@ -19,7 +19,7 @@ struct User {
 };
 
 
-void read(Item users[], string fileName, int &count) {
+void read(User users[], string fileName, int &count) {
 	ifstream  ifs(fileName);
 	string Name;
 	int Age;
@@ -53,8 +53,6 @@ __global__ void addition(User* input, User* output, size_t n, int step)
 int main() {
 
   string fileName = "../data/Paulius_Ratkevicius_L1_dat_1_ResPlain.txt";
-  regex outputdir(".txt");
-  string outputFile = regex_replace(fileName, outputdir, "Res.txt");
 
   int counter;
 
