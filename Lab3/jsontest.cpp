@@ -45,7 +45,7 @@ ns::User* ParseJson(string fileName){
     for (auto it: j.items() )
     {
         json &user = it.value();
-        users[counter] = user.get<ns::User>();
+        users[counter++] = user.get<ns::User>();
     }
     return users;
 }
