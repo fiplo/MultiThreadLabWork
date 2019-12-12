@@ -51,8 +51,8 @@ void read(User users[], string fileName, int &count) {
 __global__ void addition(User* input, User* output, size_t n, int step)
 {
 	int index = threadIdx.x;
+  int iterator = 0;
 	for (int i = index; i < n; i += step) {
-    int iterator = 0;
 		output[index].Age += input[i].Age;
 		output[index].Balance += input[i].Balance;
     for (int j = 0; j < CHAR_ARRAY_SIZE; j++) {
