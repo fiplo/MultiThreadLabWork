@@ -54,6 +54,7 @@ void OutputJson(string fileName, ns::User users[]){
     int i = 0;
     while(users[i].Age != 0 && i < ARRAY_SIZE){
         output.push_back(users[i]);
+        i++;
     }
     ofstream results(fileName);
     results << output.dump(1, '\t') << endl;
