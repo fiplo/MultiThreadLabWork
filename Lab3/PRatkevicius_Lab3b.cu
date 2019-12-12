@@ -37,7 +37,7 @@ void read(host_vector<User> &hostData, string fileName) {
 	string Name;
         int Age;
         double Balance;
-        User item;
+	User item;
 
         if (ifs.fail()) {
                 cout << "Error opening file " + fileName << endl;
@@ -55,7 +55,6 @@ void read(host_vector<User> &hostData, string fileName) {
                 item.Age = Age;
                 item.Balance = Balance;
                 hostData.push_back(item);
-
         }
 }
 int main() {

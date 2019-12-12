@@ -10,11 +10,12 @@
 using namespace std;
 
 const int ARRAY_SIZE = 50;
-const int CHAR_ARRAY_SIZE = 150;
+const int CHAR_ARRAY_SIZE = 10;
+const int STRING_SIZZE = 256;
 
 
 struct User {
-    char Name[CHAR_ARRAY_SIZE];
+    char Name[STRING_SIZE];
     int Age;
     double Balance;
 };
