@@ -79,11 +79,11 @@ int main() {
 	User* deviceData;
 	User* hostA = new User[ARRAY_SIZE];
 	User* deviceA;
-	cudaMalloc(&deviceData, counter * sizeof(User));
-	cudaMalloc(&deviceA, counter * sizeof(User));
-	cudaMemcpy(deviceData, input, counter * sizeof(User), cudaMemcpyHostToDevice);
-	addition << <1, threads >> > (deviceData, deviceA, counter, threads);
-	cudaMemcpy(hostA, deviceA, counter * sizeof(User), cudaMemcpyDeviceToHost);
+	cudaMalloc(&deviceData, ARRAY_SIZE * sizeof(User));
+	cudaMalloc(&deviceA, ARRAY_SIZE * sizeof(User));
+	cudaMemcpy(deviceData, input, ARRAY_SIZE * sizeof(User), cudaMemcpyHostToDevice);
+	addition << <1, threads >> > (deviceData, deviceA, ARRAY_SIZE, threads);
+	cudaMemcpy(hostA, deviceA, ARRAY_SIZE * sizeof(User), cudaMemcpyDeviceToHost);
 	for (int i = 0; i < threads; i++) {
 		cout << hostA[i].Name << " " << hostA[i].Age << " " << hostA[i].Balance << "\n";
 	}
