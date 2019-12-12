@@ -60,11 +60,26 @@ void OutputJson(string fileName, ns::User users[]){
     results << output.dump(1, '\t') << endl;
 }
 
+void OutputPlainText(string fileName, ns::User users[])
+{
+  ofstream results(fileName);
+  int i = 0;
+  while(users[i].Age != 0 && i < ARRAY_SIZE){
+        results << users[i].Name + " " << to_string(users[i].Age) + " " << to_string(users[i].Balance) << endl;
+        i++;
+    }
+
+
+}
+
 int main(int, char**) {
     string fileName = "../data/Paulius_Ratkevicius_L1_dat_1.json";
     regex outputdir(".json");
     string outputFile = regex_replace(fileName, outputdir, "_Res3.json");
+    string outputFilePlain = regex_replace(fileName, outputdir, "_ResPlain.txt");
+
     ns::User* users = ParseJson(fileName);
     OutputJson(outputFile, users);
+    OutputPlainText(outputFilePlain, users);
     return 0;
 }
