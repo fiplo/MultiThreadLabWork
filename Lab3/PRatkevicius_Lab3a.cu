@@ -28,7 +28,7 @@ void read(User users[], string fileName, int* count) {
   int i = 0;
 
 	if (ifs.fail()) {
-		cout << "Error opening file" + fileName << endl;
+		cout << "Error opening file " + fileName << endl;
 		exit(1);
 	}
 	while(!ifs.fail()){
@@ -66,7 +66,7 @@ __global__ void addition(User* input, User* output, size_t n, int step)
 }
 int main() {
 
-  string fileName = "../data/Paulius_Ratkevicius_L2_dat_1_ResPlain.txt";
+  string fileName = "../data/Paulius_Ratkevicius_L1_dat_1_ResPlain.txt";
 
   int counter;
 
