@@ -75,10 +75,11 @@ int main() {
 	User input[ARRAY_SIZE];
 	read(input, fileName, &counter);
   cout << counter << endl;
+  counter--;
 	User* hostData = input;
 	User* deviceData;
 	User* hostA = new User[ARRAY_SIZE];
-	User* deviceA;// = new User[ARRAY_SIZE];
+	User* deviceA;
 	cudaMalloc(&deviceData, counter * sizeof(User));
 	cudaMalloc(&deviceA, counter * sizeof(User));
 	cudaMemcpy(deviceData, input, counter * sizeof(User), cudaMemcpyHostToDevice);
