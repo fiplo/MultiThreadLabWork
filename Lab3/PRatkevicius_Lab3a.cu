@@ -62,6 +62,16 @@ ns:User* ParseJson(string fileName){
     }
     return users;
 }
+void OutputJson(string fileName, ns:User users[]){
+    json output;
+    int i = 0;
+    while(users[i].Age != 0 && i < ARRAY_SIZE){
+        output.push_back(users[i]);
+    }
+    ofstream results(fileName);
+    results << output.dump(1, '\t') << endl;
+}
+
 
 void read(Item items[]) {
 	//ifstream  ifs("IFK-7_NojusD_L3_dat.txt");
