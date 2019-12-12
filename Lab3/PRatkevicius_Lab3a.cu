@@ -9,7 +9,7 @@
 
 using namespace std;
 
-const int ARRAY_SIZE = 50;
+const int ARRAY_SIZE = 43;
 const int CHAR_ARRAY_SIZE = 100;
 const int STRING_SIZE = 256;
 
@@ -75,7 +75,6 @@ int main() {
 	User input[ARRAY_SIZE];
 	read(input, fileName, &counter);
   cout << counter << endl;
-  counter--;
 	User* hostData = input;
 	User* deviceData;
 	User* hostA = new User[ARRAY_SIZE];
