@@ -32,7 +32,7 @@ void read(User users[], string fileName, int* count) {
 		cout << "Error opening file " + fileName << endl;
 		exit(1);
 	}
-	while(!ifs.fail()){
+	while(!ifs.fail() && i < ARRAY_SIZE){
 		ifs >> Name >> Age >> Balance;
 		users[i].Age = Age;
 		users[i].Balance = Balance;
