@@ -7,7 +7,7 @@ using namespace std;
 using namespace thrust;
 
 const int ARRAY_SIZE = 25;
-const int CHAR_ARRAY_SIZE = 100;
+const int CHAR_ARRAY_SIZE = 35;
 const int STRING_SIZE = 254;
 
 struct User {
