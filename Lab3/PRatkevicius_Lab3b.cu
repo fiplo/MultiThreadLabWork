@@ -55,7 +55,6 @@ void read(host_vector<User> &hostData, string fileName) {
                 item.Age = Age;
                 item.Balance = Balance;
                 hostData.push_back(item);
-                cout << item.Name << " "  << item.Age << "\n" << item.Balance << "\n";
 
         }
 }
